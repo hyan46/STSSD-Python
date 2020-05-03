@@ -5,7 +5,7 @@ def bsplineBasis(n, k,deg):
     """B-spline type matrix for splines.
 
     Returns a matrix whose columns are the values of the b-splines of deg
-    `deg` associated with the knot sequence `knots` evaluated at the points
+    `deg` as sociated with the knot sequence `knots` evaluated at the points
     `x`.
 
     Parameters
@@ -112,9 +112,7 @@ def ewmamonit( Y,B,Bs,lambda1,allgamma, isewma=False, maxIter = 2, L = 0, mT2 = 
     defect=0;
     tnew = 1;
 
-
     for t in range(nT):
-        print(t)
         dall = [[] for i in range(gammalength)]
         thetai = [[] for i in range(gammalength)]
         e = np.zeros(gammalength);
@@ -147,7 +145,11 @@ def ewmamonit( Y,B,Bs,lambda1,allgamma, isewma=False, maxIter = 2, L = 0, mT2 = 
                     if Bs is None:
                         residual = y - Yhat
                         Snow = softthreshold(residual, allgamma[i])
-                    else:
+                    elif ndim ==2:
+                        BetaSe = X + 2/LL* Bs[0].T@(y -Bs[0]@X - Yhat)
+                        BetaS = softthreshold(BetaSe,allgamma[i]/LL); 
+                        Snow = Bs[0] @BetaS;
+                    elif ndim==3:
                         BetaSe = X + 2/LL* Bs[0].T@(y -Bs[0]@X@Bs[1].T - Yhat)@Bs[1];
                         BetaS = softthreshold(BetaSe,allgamma[i]/LL); 
                         Snow = Bs[0] @BetaS@ Bs[1].T;
